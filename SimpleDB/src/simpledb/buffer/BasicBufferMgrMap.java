@@ -29,9 +29,10 @@ class BasicBufferMgrMap {
     */
    BasicBufferMgrMap(int numbuffs) {
 	   bufferPoolMap = new HashMap<>(numbuffs);
-      numAvailable = numbuffs;
-      for (int i=0; i<numbuffs; i++)
-         bufferPoolMap.put(i, new Buffer());
+	   numAvailable = numbuffs;
+	   for (int i=0; i<numbuffs; i++) {
+		   bufferPoolMap.put(i, new Buffer());
+	   }
    }
    
    /**
@@ -61,12 +62,14 @@ class BasicBufferMgrMap {
       Buffer buff = findExistingBuffer(blk);
       if (buff == null) {
          buff = chooseUnpinnedBuffer();
-         if (buff == null)
+         if (buff == null) {
             return null;
+         }
          buff.assignToBlock(blk);
       }
-      if (!buff.isPinned())
+      if (!buff.isPinned()) {
          numAvailable--;
+      }
       buff.pin();
       return buff;
    }
@@ -82,8 +85,9 @@ class BasicBufferMgrMap {
     */
    synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
       Buffer buff = chooseUnpinnedBuffer();
-      if (buff == null)
+      if (buff == null) {
          return null;
+      }
       buff.assignToNew(filename, fmtr);
       numAvailable--;
       buff.pin();
@@ -96,8 +100,9 @@ class BasicBufferMgrMap {
     */
    synchronized void unpin(Buffer buff) {
       buff.unpin();
-      if (!buff.isPinned())
+      if (!buff.isPinned()) {
          numAvailable++;
+      }
    }
    
    /**
