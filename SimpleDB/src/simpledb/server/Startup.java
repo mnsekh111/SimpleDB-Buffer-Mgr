@@ -1,5 +1,6 @@
 package simpledb.server;
 
+import simpledb.buffer.BufferMgr;
 import simpledb.remote.*;
 import java.rmi.registry.*;
 
@@ -16,5 +17,9 @@ public class Startup {
       reg.rebind("simpledb", d);
       
       System.out.println("database server ready");
+      
+      /**********************************************************************/
+      
+      BufferMgr bm = SimpleDB.bufferMgr();
    }
 }
