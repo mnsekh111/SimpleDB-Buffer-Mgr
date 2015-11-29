@@ -21,5 +21,6 @@ public class Startup {
       /**********************************************************************/
       
       BufferMgr bm = SimpleDB.bufferMgr();
+      bm.getStatistics();
    }
 }

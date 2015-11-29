@@ -131,6 +131,7 @@ public class MapBufferMgr {
 
 		// If the buffer pool is filled with either pinned or unpinned buffers
 		if (buff == null) {
+			System.out.println("*********************************************************");
 			int lowestLSN = Integer.MAX_VALUE;
 			Buffer lowestBuffer = null;
 
@@ -188,7 +189,7 @@ public class MapBufferMgr {
 
 		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
 			try {
-				System.out.print(entry.getKey().number() + " ");
+				System.out.print(entry.getKey().number() + " " + entry.getKey().fileName());
 			} catch (NullPointerException ne) {
 				System.out.print(" null ");
 			}

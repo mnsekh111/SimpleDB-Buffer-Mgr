@@ -13,8 +13,8 @@ public class BufferStats {
 
 	private int numReads = 0;
 	private int numWrites = 0;
-	private Date lastWrite;
-	private Date lastRead;
+	private Date lastWrite = null;
+	private Date lastRead = null;
 	private int totalPins = 0;
 	private int totalUnPins = 0;
 
@@ -69,8 +69,8 @@ public class BufferStats {
 	@Override
 	public String toString() {
 		return "Number of reads   : " + numReads + "\n" + "Number of writes : " + numWrites + "\n"
-				+ "Last read time   : " + lastRead.toString() + "\n" + "Last write time  : " + lastWrite.toString()
-				+ "\n" + "Total pins : " + totalPins + "\n" + "Total unpins : "+totalUnPins + "\n";
+				+ "Last read time   : " + (lastRead != null ? lastRead.toString():"No reads ") + "\n" + "Last write time  : " + (lastWrite != null?lastWrite.toString():"No writes ")
+				+ "\n" + "Total pins : " + totalPins + "\n" + "Total unpins : " + totalUnPins + "\n";
 	}
 
 }
