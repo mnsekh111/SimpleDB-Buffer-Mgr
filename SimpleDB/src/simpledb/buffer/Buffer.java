@@ -19,7 +19,7 @@ public class Buffer {
 	private int modifiedBy = -1; // negative means not modified
 	private int logSequenceNumber = -1; // negative means no corresponding log
 										// record
-	private BufferStats stats = new BufferStats();
+	private BufferStats stats = new BufferStats(); // Holds statistics about this Buffer
 
 	/**
 	 * Creates a new buffer, wrapping a new {@link simpledb.file.Page page}.
