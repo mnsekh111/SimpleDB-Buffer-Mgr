@@ -19,6 +19,7 @@ public class Buffer {
    private int pins = 0;
    private int modifiedBy = -1;  // negative means not modified
    private int logSequenceNumber = -1; // negative means no corresponding log record
+   private long lastModifiedTime = -1;
 
    /**
     * Creates a new buffer, wrapping a new 
@@ -76,6 +77,7 @@ public class Buffer {
     */
    public void setInt(int offset, int val, int txnum, int lsn) {
       modifiedBy = txnum;
+      lastModifiedTime = System.currentTimeMillis();
       if (lsn >= 0)
 	      logSequenceNumber = lsn;
       contents.setInt(offset, val);
@@ -97,6 +99,7 @@ public class Buffer {
     */
    public void setString(int offset, String val, int txnum, int lsn) {
       modifiedBy = txnum;
+      lastModifiedTime = System.currentTimeMillis();
       if (lsn >= 0)
 	      logSequenceNumber = lsn;
       contents.setString(offset, val);
@@ -186,5 +189,15 @@ public class Buffer {
       fmtr.format(contents);
       blk = contents.append(filename);
       pins = 0;
+   }
+   
+   /**
+    * Returns the last modified time in milliseconds. Higher value 
+    * means most recently modified 
+    * @return last modified time in milliseconds 
+    */
+   
+   long getLastModifiedTime(){
+	   return lastModifiedTime;
    }
 }
