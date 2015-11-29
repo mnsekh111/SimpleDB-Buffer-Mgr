@@ -58,7 +58,7 @@ public class MapBufferMgr {
 	 * @return the pinned buffer
 	 */
 	synchronized Buffer pin(Block blk) {
-		printBufferPool("pin");
+		//printBufferPool("pin");
 		Buffer buff = findExistingBuffer(blk);
 		if (buff == null) {
 			buff = chooseUnpinnedBuffer();
@@ -86,7 +86,7 @@ public class MapBufferMgr {
 	 * @return the pinned buffer
 	 */
 	synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
-		printBufferPool("pinNew");
+		//printBufferPool("pinNew");
 		Buffer buff = chooseUnpinnedBuffer();
 		if (buff == null)
 			return null;
@@ -104,7 +104,7 @@ public class MapBufferMgr {
 	 *            the buffer to be unpinned
 	 */
 	synchronized void unpin(Buffer buff) {
-		printBufferPool("unpin");
+		//printBufferPool("unpin");
 		buff.unpin();
 		if (!buff.isPinned()) {
 			numAvailable++;
@@ -131,7 +131,6 @@ public class MapBufferMgr {
 
 		// If the buffer pool is filled with either pinned or unpinned buffers
 		if (buff == null) {
-			System.out.println("*********************************************************");
 			int lowestLSN = Integer.MAX_VALUE;
 			Buffer lowestBuffer = null;
 
@@ -178,24 +177,24 @@ public class MapBufferMgr {
 		}
 		return buff;
 	}
-
-	/**
-	 * Remove all calls for this function
-	 * 
-	 * @param from
-	 */
-	private void printBufferPool(String from) {
-		System.out.println("Called from " + from);
-
-		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
-			try {
-				System.out.print(entry.getKey().number() + " " + entry.getKey().fileName());
-			} catch (NullPointerException ne) {
-				System.out.print(" null ");
-			}
-		}
-		System.out.println();
-	}
+//
+//	/**
+//	 * Remove all calls for this function
+//	 * 
+//	 * @param from
+//	 */
+//	private void printBufferPool(String from) {
+//		System.out.println("Called from " + from);
+//
+//		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
+//			try {
+//				System.out.print(entry.getKey().number() + " " + entry.getKey().fileName());
+//			} catch (NullPointerException ne) {
+//				System.out.print(" null ");
+//			}
+//		}
+//		System.out.println();
+//	}
 
 	public void getStatistics() {
 		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
