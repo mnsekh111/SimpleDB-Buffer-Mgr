@@ -3,8 +3,12 @@ package simpledb.buffer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.omg.CORBA.TRANSACTION_MODE;
+
 import simpledb.file.Block;
 import simpledb.file.FileMgr;
+import simpledb.server.SimpleDB;
+import simpledb.tx.Transaction;
 
 /**
  * @author smnatara
@@ -107,7 +111,6 @@ public class MapBufferMgr {
 		buff.unpin();
 		if (!buff.isPinned()) {
 			numAvailable++;
-			bufferPoolMap.remove(buff.block());
 		}
 	}
 
@@ -125,15 +128,42 @@ public class MapBufferMgr {
 	}
 
 	private Buffer chooseUnpinnedBuffer() {
-		Buffer buff = numAvailable > 0 ? new Buffer() : null;
+		
+		// Checks if there is some empty slots in the pool
+		Buffer buff = bufferPoolMap.size() < SimpleDB.BUFFER_SIZE ? new Buffer() : null;
 
+		// If the buffer pool is filled with either pinned or unpinned buffers
 		if (buff == null) {
-			long high = Long.MIN_VALUE;
+			int lowestModLSN = Integer.MAX_VALUE;
+			int lowestUnPinnedLSN = Integer.MAX_VALUE;
+
+			Buffer lowestModBuffer = null;
+			Buffer lowestUnPinnedBuffer = null;
+
 			for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
-				if (entry.getValue().getLastModifiedTime() > high) {
-					high = entry.getValue().getLastModifiedTime();
-					buff = entry.getValue();
+				if (!entry.getValue().isModifiedBy(-1)) {
+					if (entry.getValue().getLogSequenceNumber() < lowestModLSN) {
+						lowestModBuffer = entry.getValue();
+						lowestModLSN = lowestModBuffer.getLogSequenceNumber();
+					}
 				}
+
+				if (!entry.getValue().isPinned()) {
+					if (entry.getValue().getLogSequenceNumber() < lowestUnPinnedLSN) {
+						lowestUnPinnedBuffer = entry.getValue();
+						lowestUnPinnedLSN = lowestUnPinnedBuffer.getLogSequenceNumber();
+					}
+				}
+			}
+
+			// None of the buffers have been modified
+			if (lowestModBuffer == null) {
+				// If there is at least one unpinned buffer
+				if (lowestUnPinnedBuffer != null) {
+					buff = lowestUnPinnedBuffer;
+				}
+			} else {
+				buff = lowestModBuffer;
 			}
 		}
 		return buff;
