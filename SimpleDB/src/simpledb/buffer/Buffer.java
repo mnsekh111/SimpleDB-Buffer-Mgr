@@ -19,6 +19,7 @@ public class Buffer {
 	private int modifiedBy = -1; // negative means not modified
 	private int logSequenceNumber = -1; // negative means no corresponding log
 										// record
+	private BufferStats stats = new BufferStats();
 
 	/**
 	 * Creates a new buffer, wrapping a new {@link simpledb.file.Page page}.
@@ -42,7 +43,10 @@ public class Buffer {
 	 *            the byte offset of the page
 	 * @return the integer value at that offset
 	 */
-	public int getInt(int offset) {
+	public int getInt(int offset) {// TODO Auto-generated method stub
+		stats.updateLastRead();
+		stats.updateNumReads();
+		
 		return contents.getInt(offset);
 	}
 
@@ -56,6 +60,9 @@ public class Buffer {
 	 * @return the string value at that offset
 	 */
 	public String getString(int offset) {
+		stats.updateLastRead();
+		stats.updateNumReads();
+		
 		return contents.getString(offset);
 	}
 
@@ -80,6 +87,10 @@ public class Buffer {
 		if (lsn >= 0)
 			logSequenceNumber = lsn;
 		contents.setInt(offset, val);
+		
+		stats.updateLastWrite();
+		stats.updateNumWrites();
+		
 	}
 
 	/**
@@ -103,6 +114,10 @@ public class Buffer {
 		if (lsn >= 0)
 			logSequenceNumber = lsn;
 		contents.setString(offset, val);
+		
+
+		stats.updateLastWrite();
+		stats.updateNumWrites();
 	}
 
 	/**
@@ -197,6 +212,10 @@ public class Buffer {
 	
 	int getLogSequenceNumber(){
 		return logSequenceNumber;
+	}
+	
+	BufferStats getStats(){
+		return stats;
 	}
 
 }

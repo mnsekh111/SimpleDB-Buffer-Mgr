@@ -3,12 +3,9 @@ package simpledb.buffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.omg.CORBA.TRANSACTION_MODE;
-
 import simpledb.file.Block;
 import simpledb.file.FileMgr;
 import simpledb.server.SimpleDB;
-import simpledb.tx.Transaction;
 
 /**
  * @author smnatara
@@ -185,5 +182,14 @@ public class MapBufferMgr {
 			}
 		}
 		System.out.println();
+	}
+
+	public void getStatistics() {
+		
+		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
+			System.out.println(entry.getValue().getStats().toString());
+		}
+		System.out.println();
+
 	}
 }

@@ -116,4 +116,8 @@ class BasicBufferMgr {
          return buff;
       return null;
    }
+   
+   //To be implemented
+   public void getStatistics(){
+   }
 }
