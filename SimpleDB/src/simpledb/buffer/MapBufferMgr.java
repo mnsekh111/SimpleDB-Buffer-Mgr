@@ -125,43 +125,55 @@ public class MapBufferMgr {
 	}
 
 	private Buffer chooseUnpinnedBuffer() {
-		
+
 		// Checks if there is some empty slots in the pool
 		Buffer buff = bufferPoolMap.size() < SimpleDB.BUFFER_SIZE ? new Buffer() : null;
 
 		// If the buffer pool is filled with either pinned or unpinned buffers
 		if (buff == null) {
-			int lowestModLSN = Integer.MAX_VALUE;
-			int lowestUnPinnedLSN = Integer.MAX_VALUE;
-
-			Buffer lowestModBuffer = null;
-			Buffer lowestUnPinnedBuffer = null;
+			int lowestLSN = Integer.MAX_VALUE;
+			Buffer lowestBuffer = null;
 
 			for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
-				if (!entry.getValue().isModifiedBy(-1)) {
-					if (entry.getValue().getLogSequenceNumber() < lowestModLSN) {
-						lowestModBuffer = entry.getValue();
-						lowestModLSN = lowestModBuffer.getLogSequenceNumber();
-					}
-				}
 
 				if (!entry.getValue().isPinned()) {
-					if (entry.getValue().getLogSequenceNumber() < lowestUnPinnedLSN) {
-						lowestUnPinnedBuffer = entry.getValue();
-						lowestUnPinnedLSN = lowestUnPinnedBuffer.getLogSequenceNumber();
+					if (!entry.getValue().isModifiedBy(-1) && entry.getValue().getLogSequenceNumber() < lowestLSN) {
+						lowestBuffer = entry.getValue();
+						lowestLSN = lowestBuffer.getLogSequenceNumber();
 					}
 				}
 			}
 
-			// None of the buffers have been modified
-			if (lowestModBuffer == null) {
-				// If there is at least one unpinned buffer
-				if (lowestUnPinnedBuffer != null) {
-					buff = lowestUnPinnedBuffer;
+			// None of the unpinned buffers have been modified
+			if (lowestBuffer == null) {
+				for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
+
+					if (!entry.getValue().isPinned()) {
+						if (entry.getValue().getLogSequenceNumber() != -1
+								&& entry.getValue().getLogSequenceNumber() < lowestLSN) {
+							lowestBuffer = entry.getValue();
+							lowestLSN = lowestBuffer.getLogSequenceNumber();
+						}
+					}
 				}
-			} else {
-				buff = lowestModBuffer;
 			}
+
+			// None of the unpinned and unmodified pins have a positive lsn
+			if (lowestBuffer == null) {
+				for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
+
+					if (!entry.getValue().isPinned()) {
+						lowestBuffer = entry.getValue();
+					}
+				}
+			}
+
+			// This will be null only when there is no unpinned buffers
+			buff = lowestBuffer;
+		}
+
+		if (buff != null) {
+			bufferPoolMap.remove(buff.block());
 		}
 		return buff;
 	}
@@ -185,9 +197,8 @@ public class MapBufferMgr {
 	}
 
 	public void getStatistics() {
-		
 		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
-			System.out.println(entry.getValue().getStats().toString());
+			System.out.println(entry.getValue().getStats().toString() + entry.getValue().getInBuiltStats());
 		}
 		System.out.println();
 

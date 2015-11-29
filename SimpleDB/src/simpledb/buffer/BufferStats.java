@@ -3,8 +3,9 @@ package simpledb.buffer;
 import java.util.Date;
 
 /**
- * <b>BufferStats</b> class holds statistics about a particular buffer
- * It's wrapped inside {@link Buffer}
+ * <b>BufferStats</b> class holds statistics about a particular buffer It's
+ * wrapped inside {@link Buffer}
+ * 
  * @author mns
  *
  */
@@ -14,6 +15,16 @@ public class BufferStats {
 	private int numWrites = 0;
 	private Date lastWrite;
 	private Date lastRead;
+	private int totalPins = 0;
+	private int totalUnPins = 0;
+
+	public void updateTotalPins() {
+		totalPins++;
+	}
+
+	public void updateTotalUnPins() {
+		totalUnPins++;
+	}
 
 	public void updateNumReads() {
 		numReads++;
@@ -47,11 +58,19 @@ public class BufferStats {
 		return lastRead;
 	}
 
+	public int getTotalPins() {
+		return totalPins;
+	}
+
+	public int getTotalUnPins() {
+		return totalUnPins;
+	}
+
 	@Override
 	public String toString() {
 		return "Number of reads   : " + numReads + "\n" + "Number of writes : " + numWrites + "\n"
 				+ "Last read time   : " + lastRead.toString() + "\n" + "Last write time  : " + lastWrite.toString()
-				+ "\n";
+				+ "\n" + "Total pins : " + totalPins + "\n" + "Total unpins : "+totalUnPins + "\n";
 	}
 
 }

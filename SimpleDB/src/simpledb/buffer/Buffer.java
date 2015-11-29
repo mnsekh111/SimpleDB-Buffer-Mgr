@@ -146,6 +146,7 @@ public class Buffer {
 	 * Increases the buffer's pin count.
 	 */
 	void pin() {
+		stats.updateTotalPins();
 		pins++;
 	}
 
@@ -153,6 +154,7 @@ public class Buffer {
 	 * Decreases the buffer's pin count.
 	 */
 	void unpin() {
+		stats.updateTotalUnPins();
 		pins--;
 	}
 
@@ -216,6 +218,10 @@ public class Buffer {
 	
 	BufferStats getStats(){
 		return stats;
+	}
+	
+	String getInBuiltStats(){
+		return "Current pins : " + pins + "\n" + "LSN : " + logSequenceNumber + "\n";
 	}
 
 }
