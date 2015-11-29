@@ -2,6 +2,12 @@ package simpledb.buffer;
 
 import java.util.Date;
 
+/**
+ * <b>BufferStats</b> class holds statistics about a particular buffer
+ * It's wrapped inside {@link Buffer}
+ * @author mns
+ *
+ */
 public class BufferStats {
 
 	private int numReads = 0;
