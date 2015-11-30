@@ -125,6 +125,8 @@ public class BufferMgr {
    }
    
    public void getStatistics(){
+	   System.out.println("---------------------- Statistics Starts --------------------------------");
 	   bufferMgr.getStatistics();
+	   System.out.println("---------------------- Statistics Ends --------------------------------");
    }
 }

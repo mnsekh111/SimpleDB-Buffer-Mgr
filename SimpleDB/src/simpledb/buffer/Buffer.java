@@ -221,7 +221,7 @@ public class Buffer {
 	}
 	
 	String getInBuiltStats(){
-		return "Current pins : " + pins + "\n" + "LSN : " + logSequenceNumber + "\n";
+		return "Current pins : " + pins + "\n" + "LSN : " + logSequenceNumber + "\n"+"File Name: "+blk.fileName()+"\n"+"Block number: "+blk.number()+"\n";
 	}
 
 }

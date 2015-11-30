@@ -69,7 +69,7 @@ public class BufferStats {
 	@Override
 	public String toString() {
 		return "Number of reads   : " + numReads + "\n" + "Number of writes : " + numWrites + "\n"
-				+ "Last read time   : " + (lastRead != null ? lastRead.toString():"No reads ") + "\n" + "Last write time  : " + (lastWrite != null?lastWrite.toString():"No writes ")
+				+ "Last read time   : " + (lastRead != null ? lastRead.getTime():"No reads ") + "\n" + "Last write time  : " + (lastWrite != null?lastWrite.getTime():"No writes ")
 				+ "\n" + "Total pins : " + totalPins + "\n" + "Total unpins : " + totalUnPins + "\n";
 	}
 
