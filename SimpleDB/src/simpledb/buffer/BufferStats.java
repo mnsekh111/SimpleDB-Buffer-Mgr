@@ -1,5 +1,6 @@
 package simpledb.buffer;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -17,6 +18,8 @@ public class BufferStats {
 	private Date lastRead = null;
 	private int totalPins = 0;
 	private int totalUnPins = 0;
+	
+	private static SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss.SSS");
 
 	public void updateTotalPins() {
 		totalPins++;
@@ -69,7 +72,7 @@ public class BufferStats {
 	@Override
 	public String toString() {
 		return "Number of reads   : " + numReads + "\n" + "Number of writes : " + numWrites + "\n"
-				+ "Last read time   : " + (lastRead != null ? lastRead.toString():"No reads ") + "\n" + "Last write time  : " + (lastWrite != null?lastWrite.toString():"No writes ")
+				+ "Last read time   : " + (lastRead != null ? sdf.format(lastRead):"No reads ") + "\n" + "Last write time  : " + (lastWrite != null?sdf.format(lastWrite):"No writes ")
 				+ "\n" + "Total pins : " + totalPins + "\n" + "Total unpins : " + totalUnPins + "\n";
 	}
 

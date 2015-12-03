@@ -1,6 +1,7 @@
 package simpledb.buffer;
 
-import simpledb.file.*;
+import simpledb.file.Block;
+import simpledb.file.FileMgr;
 
 /**
  * Manages the pinning and unpinning of buffers to blocks.
@@ -127,5 +128,9 @@ class BasicBufferMgr {
 
 	// To be implemented
 	public void getStatistics() {
+		for (Buffer buff : bufferpool) {
+			System.out.println(buff.getStats().toString() + buff.getInBuiltStats());
+		}
+		System.out.println();
 	}
 }
