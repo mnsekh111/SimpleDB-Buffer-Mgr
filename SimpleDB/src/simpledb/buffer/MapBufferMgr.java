@@ -149,10 +149,14 @@ public class MapBufferMgr {
 				for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
 
 					if (!entry.getValue().isPinned()) {
-						if (entry.getValue().getLogSequenceNumber() != -1
-								&& entry.getValue().getLogSequenceNumber() < lowestLSN) {
+						if (entry.getValue().getLogSequenceNumber() != -1 && entry.getValue().getLogSequenceNumber() < lowestLSN) {
 							lowestBuffer = entry.getValue();
 							lowestLSN = lowestBuffer.getLogSequenceNumber();
+						}else if(entry.getValue().getLogSequenceNumber() != -1 && entry.getValue().getLogSequenceNumber() == lowestLSN){
+							if(entry.getValue().getStats().getLastWrite() != null && (entry.getValue().getStats().getLastWrite().before(lowestBuffer.getStats().getLastWrite()))){
+								lowestBuffer = entry.getValue();
+								lowestLSN = lowestBuffer.getLogSequenceNumber();
+							}
 						}
 					}
 				}
@@ -164,6 +168,7 @@ public class MapBufferMgr {
 
 					if (!entry.getValue().isPinned()) {
 						lowestBuffer = entry.getValue();
+						break;
 					}
 				}
 			}
@@ -173,6 +178,11 @@ public class MapBufferMgr {
 		}
 
 		if (buff != null) {
+//			BufferMgr bm = SimpleDB.bufferMgr();
+//		    bm.getStatistics();
+//		    if(buff.block() != null){
+//		    	System.out.println("File Name: "+buff.block().fileName()+"Block number: "+buff.block().number());
+//		    }
 			bufferPoolMap.remove(buff.block());
 		}
 		return buff;
