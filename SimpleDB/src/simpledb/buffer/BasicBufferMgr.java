@@ -127,5 +127,9 @@ class BasicBufferMgr {
 
 	// To be implemented
 	public void getStatistics() {
+		for (Buffer buff : bufferpool) {
+			System.out.println(buff.getStats().toString() + buff.getInBuiltStats());
+		}
+		System.out.println();
 	}
 }
