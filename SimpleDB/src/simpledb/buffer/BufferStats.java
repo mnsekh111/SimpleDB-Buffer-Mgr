@@ -11,12 +11,12 @@ import java.util.Date;
  */
 public class BufferStats {
 
-	private int numReads = 0;
-	private int numWrites = 0;
-	private Date lastWrite = null;
-	private Date lastRead = null;
-	private int totalPins = 0;
-	private int totalUnPins = 0;
+	public int numReads = 0;
+	public int numWrites = 0;
+	public Date lastWrite = null;
+	public Date lastRead = null;
+	public int totalPins = 0;
+	public int totalUnPins = 0;
 
 	public void updateTotalPins() {
 		totalPins++;

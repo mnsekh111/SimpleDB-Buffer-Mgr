@@ -19,7 +19,7 @@ import simpledb.file.*;
  * @author Edward Sciore
  */
 public class BufferMgr {
-   private static final long MAX_TIME = 10000; // 10 seconds
+   private static final long MAX_TIME = 1000; // 1 seconds
    //private BasicBufferMgr bufferMgr;
    private MapBufferMgr bufferMgr;
    
@@ -126,5 +126,9 @@ public class BufferMgr {
    
    public void getStatistics(){
 	   bufferMgr.getStatistics();
+   }
+   
+   public MapBufferMgr getMapBufferMgr(){
+	   return bufferMgr;
    }
 }

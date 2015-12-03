@@ -13,11 +13,11 @@ import simpledb.file.*;
  * @author Edward Sciore
  */
 public class Buffer {
-	private Page contents = new Page();
-	private Block blk = null;
-	private int pins = 0;
-	private int modifiedBy = -1; // negative means not modified
-	private int logSequenceNumber = -1; // negative means no corresponding log
+	public Page contents = new Page();
+	public Block blk = null;
+	public int pins = 0;
+	public int modifiedBy = -1; // negative means not modified
+	public int logSequenceNumber = -1; // negative means no corresponding log
 										// record
 	private BufferStats stats = new BufferStats(); // Holds statistics about this Buffer
 

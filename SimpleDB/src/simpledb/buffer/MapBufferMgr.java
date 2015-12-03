@@ -13,8 +13,8 @@ import simpledb.server.SimpleDB;
  */
 public class MapBufferMgr {
 
-	private Map<Block, Buffer> bufferPoolMap;
-	private int numAvailable;
+	public Map<Block, Buffer> bufferPoolMap;
+	public int numAvailable;
 
 	/**
 	 * Creates a buffer manager having the specified number of buffer slots.
@@ -60,10 +60,13 @@ public class MapBufferMgr {
 	synchronized Buffer pin(Block blk) {
 		//printBufferPool("pin");
 		Buffer buff = findExistingBuffer(blk);
+	
 		if (buff == null) {
 			buff = chooseUnpinnedBuffer();
 			if (buff == null)
+			{
 				return null;
+			}
 			buff.assignToBlock(blk);
 		}
 		if (!buff.isPinned()) {
@@ -120,11 +123,11 @@ public class MapBufferMgr {
 		return numAvailable;
 	}
 
-	private Buffer findExistingBuffer(Block blk) {
+	public Buffer findExistingBuffer(Block blk) {
 		return bufferPoolMap.get(blk);
 	}
 
-	private Buffer chooseUnpinnedBuffer() {
+	public Buffer chooseUnpinnedBuffer() {
 
 		// Checks if there is some empty slots in the pool
 		Buffer buff = bufferPoolMap.size() < SimpleDB.BUFFER_SIZE ? new Buffer() : null;
@@ -164,6 +167,7 @@ public class MapBufferMgr {
 
 					if (!entry.getValue().isPinned()) {
 						lowestBuffer = entry.getValue();
+						break;
 					}
 				}
 			}
@@ -177,24 +181,24 @@ public class MapBufferMgr {
 		}
 		return buff;
 	}
-//
-//	/**
-//	 * Remove all calls for this function
-//	 * 
-//	 * @param from
-//	 */
-//	private void printBufferPool(String from) {
-//		System.out.println("Called from " + from);
-//
-//		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
-//			try {
-//				System.out.print(entry.getKey().number() + " " + entry.getKey().fileName());
-//			} catch (NullPointerException ne) {
-//				System.out.print(" null ");
-//			}
-//		}
-//		System.out.println();
-//	}
+
+	/**
+	 * Remove all calls for this function
+	 * 
+	 * @param from
+	 */
+	public void printBufferPool(String from) {
+		System.out.println("Called from " + from);
+
+		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
+			try {
+				System.out.print(entry.getKey().number() + " " + entry.getKey().fileName() + "---");
+			} catch (NullPointerException ne) {
+				System.out.print(" null ");
+			}
+		}
+		System.out.println();
+	}
 
 	public void getStatistics() {
 		for (Map.Entry<Block, Buffer> entry : bufferPoolMap.entrySet()) {
@@ -203,4 +207,15 @@ public class MapBufferMgr {
 		System.out.println();
 
 	}
+	
+	
+	//debug clear
+	public void resetMap(){
+		bufferPoolMap = new HashMap<Block, Buffer>();
+	}
+	
+	public Map<Block, Buffer> getPool(){
+		return bufferPoolMap;
+	}
+	
 }
