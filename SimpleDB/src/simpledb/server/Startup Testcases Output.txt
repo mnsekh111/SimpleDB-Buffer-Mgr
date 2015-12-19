@@ -1,0 +1,48 @@
+Available buffers before pinning : 8
+file 0 is pinned successfully!
+Available buffers : 7
+Buffer status : file 0  
+file 1 is pinned successfully!
+Available buffers : 6
+Buffer status : file 0  file 1  
+file 2 is pinned successfully!
+Available buffers : 5
+Buffer status : file 0  file 1  file 2  
+file 3 is pinned successfully!
+Available buffers : 4
+Buffer status : file 0  file 3  file 1  file 2  
+file 4 is pinned successfully!
+/* This can be reproduced by changing all the access specifiers in Buffer package to public and using startup Testcases.java as Startup.Java */
+
+
+Available buffers : 3
+Buffer status : file 4  file 0  file 3  file 1  file 2  
+file 5 is pinned successfully!
+Available buffers : 2
+Buffer status : file 4  file 0  file 3  file 5  file 1  file 2  
+file 6 is pinned successfully!
+Available buffers : 1
+Buffer status : file 4  file 0  file 3  file 6  file 5  file 1  file 2  
+file 7 is pinned successfully!
+Available buffers : 0
+Buffer status : file 4  file 0  file 3  file 6  file 5  file 1  file 2  file 7  
+Available buffers after pinning : 0
+file 8 cannot  be pinned
+Buffer is full. Cannot pin
+Buffer status : file 4  file 0  file 3  file 6  file 5  file 1  file 2  file 7  
+Unpinned file 0
+Buffer status : file 4  file 0  file 3  file 6  file 5  file 1  file 2  file 7  
+file 8 is pinned
+Available buffers : 0
+Buffer status : file 4  file 8  file 3  file 6  file 5  file 1  file 2  file 7  
+Making all the buffers unmodified and lsn =-1. Trying to pin will select a random buffer
+Buffer status : file 4  file 8  file 3  file 6  file 5  file 1  file 2  file 7  
+Trying to pin file 9
+file 9 pinned successfully
+Buffer status : file 8  file 9  file 3  file 6  file 5  file 1  file 2  file 7  
+Trying to pin file 9
+file 10 pinned successfully
+Buffer status : file 8  file 9  file 3  file 10  file 6  file 5  file 2  file 7  
+Trying to retrieve the buffer of a non existing block file 1
+Buffer that had this block is replaced
+
